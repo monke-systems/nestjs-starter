@@ -34,6 +34,7 @@
     "typescript": "5.1.6"
   },
   "peerDependencies": {
+    "@fastify/static": "^6.12.0",
     "@monkee/turbo-config": "^2.0.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/platform-fastify": "^10.0.0",
