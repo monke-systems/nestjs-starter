@@ -3,6 +3,8 @@ import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type { DebouncedFunction } from './debounce';
 import { debounce } from './debounce';
 
+// Dlya vas perduliroval Alexander Tolmachev https://github.com/orgs/monke-systems/people/AlexTolmachev
+
 export const createFastifyGracefulShutdownPlugin = (logger: Logger) => {
   return async (fastify: FastifyInstance) => {
     logger.log('Started plugin', 'GracefulShutdown');
