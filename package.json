@@ -1,0 +1,59 @@
+{
+  "name": "@monkee/nestjs-starter",
+  "description": "@monkee/nestjs-starter package",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc --project tsconfig.build.json",
+    "test:integration": "jest test",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
+    "prepublishOnly": "npm run build",
+    "clean": "rm -rf lib"
+  },
+  "devDependencies": {
+    "@monkee/eslint-config": "0.9.16",
+    "@monkee/small-standards": "^0.1.1",
+    "@types/jest": "^29.5.2",
+    "@types/node": "20.3.1",
+    "@typescript-eslint/eslint-plugin": "6.2.0",
+    "@typescript-eslint/parser": "6.2.0",
+    "eslint": "8.45.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "4.2.1",
+    "jest": "^29.5.0",
+    "prettier": "2.8.8",
+    "ts-jest": "^29.1.0",
+    "ts-node": "10.9.1",
+    "typescript": "5.1.6"
+  },
+  "peerDependencies": {
+    "@monkee/turbo-config": "^2.0.0",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/platform-fastify": "^10.0.0",
+    "@nestjs/swagger": "^7.0.0",
+    "class-validator": "^0.13.2",
+    "fastify": "^4.26.2",
+    "nestjs-pino": "^3.5.0",
+    "prom-client": "^15.0.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "./",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
