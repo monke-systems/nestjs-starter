@@ -20,10 +20,10 @@ export const createStarterApp = async (
   return app;
 };
 
-export const initStarterApp = <T extends NestStarterConfig>(
+export const initStarterApp = async <T extends NestStarterConfig>(
   app: NestFastifyApplication,
   configClass: new () => T,
-): INestApplication => {
+): Promise<INestApplication> => {
   const logger = app.get(Logger);
   app.useLogger(logger);
 
@@ -47,7 +47,7 @@ export const initStarterApp = <T extends NestStarterConfig>(
     setupSwagger(app, config.appName, config.swagger);
   }
 
-  return app;
+  return Promise.resolve(app);
 };
 
 export const startStarterApp = async <T extends NestStarterConfig>(
