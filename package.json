@@ -8,12 +8,12 @@
     "lib"
   ],
   "scripts": {
-    "start": "ts-node src/index.ts",
     "build": "tsc --project tsconfig.build.json",
     "test": "npm run test:integration",
     "test:integration": "jest test",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
+    "start-example-app": "NODE_ENV=development ts-node test/example-app/main.ts",
     "prepublishOnly": "npm run build",
     "clean": "rm -rf lib"
   },

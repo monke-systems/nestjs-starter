@@ -100,4 +100,7 @@ lib/
 dist/
 
 # Env files
-.env.*.local 
+.env.*.local
+
+src/resources/*
+CONFIG_REFERENCE.MD
