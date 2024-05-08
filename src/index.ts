@@ -1,4 +1,4 @@
-export * from './starter/starter-bootstrap';
+export * from './starter/starter-app';
 export * from './starter/starter-config';
 export * from './starter/starter-modules';
 export * from './modules/actuator';

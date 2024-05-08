@@ -40,6 +40,7 @@
   "peerDependencies": {
     "@monkee/turbo-config": "^2.0.0",
     "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
     "@nestjs/platform-fastify": "^10.0.0",
     "@nestjs/swagger": "^7.0.0",
     "class-validator": "0.13.2",
