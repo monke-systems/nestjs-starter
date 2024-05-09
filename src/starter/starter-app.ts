@@ -43,12 +43,6 @@ export const initStarterApp = async <T extends NestStarterConfig>(
 
   const config = app.get(configClass);
 
-  if (config.http.corsOrigin !== undefined) {
-    app.enableCors({
-      origin: config.http.corsOrigin,
-    });
-  }
-
   app.enableShutdownHooks();
 
   if (config.http.gracefulShutdown.enabled) {

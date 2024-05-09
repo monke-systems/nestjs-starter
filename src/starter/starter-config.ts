@@ -36,9 +36,6 @@ export class HttpServerConfig {
 
   @ConfigField({ nested: true })
   gracefulShutdown!: GracefulShutdownConfig;
-
-  @ConfigField({ optional: true })
-  corsOrigin?: string;
 }
 
 export class ActuatorConfig implements ActuatorModuleConfig {
