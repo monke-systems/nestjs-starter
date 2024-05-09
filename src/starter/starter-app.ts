@@ -77,7 +77,7 @@ export const startStarterApp = async <T extends NestStarterConfig>(
 
   // ugly solution for pino logging stack issue
   // toplevel logger is not working properly and ships logs with delay
-  await setTimeout(1);
+  await setTimeout(50);
 
   logger.log(`Listening on ${appUrl}`, loggerContext);
 
