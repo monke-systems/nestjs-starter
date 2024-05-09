@@ -142,7 +142,7 @@ Since there is currently no established format for structured logs (waiting for 
 Log format with basic fields:
 ```json
 {
-    "time": 1696689301574,
+    "timestamp": 1696689301574,
     "level": "debug",
     "message": "Debug message",
     "context": "default",

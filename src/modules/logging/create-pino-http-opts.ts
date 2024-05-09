@@ -18,6 +18,8 @@ export const createPinoHttpOpts = (
     base: undefined,
     level: config.level,
     messageKey: 'message',
+    // https://github.com/pinojs/pino/issues/674
+    timestamp: () => `,"timestamp":"${Date.now()}"`,
     // // Default numeric levels is not human-readable and not supported by logging tools well
     // // https://github.com/grafana/grafana/blob/master/packages/grafana-data/src/types/logs.ts#L9-L27
     formatters: {
@@ -32,6 +34,7 @@ export const createPinoHttpOpts = (
             colorize: true,
             levelFirst: true,
             messageKey: 'message',
+            timestampKey: 'timestamp',
           },
         }
       : undefined,
