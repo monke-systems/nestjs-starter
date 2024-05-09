@@ -1,3 +1,4 @@
+import { setTimeout } from 'timers/promises';
 import type { INestApplication, Logger as NestLogger } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -73,6 +74,10 @@ export const startStarterApp = async <T extends NestStarterConfig>(
 
   await app.listen(config.http.port, '0.0.0.0');
   const appUrl = await app.getUrl();
+
+  // ugly solution for pino logging stack issue
+  // toplevel logger is not working properly and ships logs with delay
+  await setTimeout(1);
 
   logger.log(`Listening on ${appUrl}`, loggerContext);
 
