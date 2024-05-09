@@ -10,7 +10,8 @@ export async function setupGracefulShutdown(
   app: NestFastifyApplication,
   logger: Logger,
 ) {
-  async function FastifyGracefulShutdownPlugin(fastify: FastifyInstance) {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async function fastifyGracefulShutdownPlugin(fastify: FastifyInstance) {
     logger.log('Graceful shutdown initialization started', 'GracefulShutdown');
 
     let signalReceived = false;
@@ -38,6 +39,7 @@ export async function setupGracefulShutdown(
           }),
         );
 
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         resolveRequestFlowStoppedPromise();
       }
 
@@ -46,6 +48,7 @@ export async function setupGracefulShutdown(
 
     fastify.addHook('onSend', (request, reply, _, done) => {
       if (signalReceived) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         reply.header('Connection', 'close');
 
         // also available as request.raw.socket
@@ -95,6 +98,7 @@ export async function setupGracefulShutdown(
       }, 1000);
 
       // it's debounced, so if there are requests still incoming, they will debounce it even more
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       resolveRequestFlowStoppedPromise();
 
       const time1 = Date.now();
@@ -147,10 +151,10 @@ export async function setupGracefulShutdown(
   }
 
   // @ts-expect-error https://www.fastify.io/docs/latest/Reference/Plugins/#handle-the-scope
-  FastifyGracefulShutdownPlugin[Symbol.for('skip-override')] = true;
+  fastifyGracefulShutdownPlugin[Symbol.for('skip-override')] = true;
 
   await app
     .getHttpAdapter()
     .getInstance()
-    .register(FastifyGracefulShutdownPlugin);
+    .register(fastifyGracefulShutdownPlugin);
 }

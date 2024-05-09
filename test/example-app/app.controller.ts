@@ -8,7 +8,7 @@ export class AppController {
   constructor(private service: AppService) {}
 
   @Get('/hello')
-  async getHello() {
+  getHello() {
     this.logger.log('Hello World from controller!');
 
     return this.service.getHello();
