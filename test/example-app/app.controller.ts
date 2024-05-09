@@ -1,4 +1,3 @@
-import { setTimeout } from 'timers/promises';
 import { Controller, Get, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -11,8 +10,6 @@ export class AppController {
   @Get('/hello')
   async getHello() {
     this.logger.log('Hello World from controller!');
-
-    await setTimeout(60000);
 
     return this.service.getHello();
   }

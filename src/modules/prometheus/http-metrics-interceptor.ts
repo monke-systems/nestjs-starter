@@ -41,7 +41,7 @@ export class HttpMetricsInterceptor implements NestInterceptor {
     }
 
     this.requestTime = this.registry.createHistogram(
-      'http_server_requests_seconds',
+      'nest_http_requests_seconds',
       'Http server request time seconds',
       ['method', 'uri', 'status'],
     );

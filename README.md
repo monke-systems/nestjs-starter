@@ -150,6 +150,14 @@ Log format with basic fields:
 }
 ```
 
+### Metrics example
+
+```
+# HELP nest_log_events_total Total count of log events
+# TYPE nest_log_events_total counter
+nest_log_events_total{level="debug",context="default"} 1
+```
+
 ## Http server
 
 ### Why include it in the starter?
@@ -164,19 +172,51 @@ NestJS suffers from a lack of abstraction over the HTTP server, directly referen
 
 The starter provides a pre-configured setup of Fastify. It was chosen as a more maintained project. Also, for some projects, performance may be a critical factor.
 
+### Metrics example
+
+```
+# HELP http_server_requests_seconds Http server request time seconds
+# TYPE http_server_requests_seconds histogram
+nest_http_requests_seconds_bucket{le="+Inf",method="GET",uri="/hello",status="200"} 1
+nest_http_requests_seconds_sum{method="GET",uri="/hello",status="200"} 0.0008857910000006086
+nest_http_requests_seconds_count{method="GET",uri="/hello",status="200"} 1
+```
+
 ## Production-ready features
+
+### Actuator
+
+Yes, our team couldn't come up with our own term. The actuator is a well-known concept from the Spring Boot ecosystem.
+The actuator mainly exposes operational information about the running application — health, metrics, info etc.
 
 ### Graceful shutdown
 
-TODO: Add info about graceful shutdown
+Essential feature for cloud deployments. "Zero-downtime" deployment is a must-have for any modern application.
 
 ### Healthcheck
 
-TODO: Add info about healthcheck
+The starter provides two simple health checks:
+1. /actuator/health - At the moment, it will only detect application freeze, without checking system components. Can be used as a liveness probe with caution.
+2. /actuator/readiness - This endpoint checks the http server readiness. It can be used as a readiness probe.
 
 ### Prometheus metrics
 
-TODO: Add info about prometheus metrics
+Surprisingly, the observability point is simply absent from the NestJS documentation. Any modern application should have monitoring tools.
+
+The starter provides a module for Prometheus.
+The module implements the [standard interface](https://github.com/monke-systems/small-standards/blob/master/src/standards/prometheus.ts), so all starter modules and third-party modules that implement the interface can provide their own metrics.
+
+The starter already includes metrics for:
+
+1. HTTP module
+2. Logging module
+3. Default Node.js process
+
+Default metrics endpoint is
+
+```
+ /actuator/prometheus
+```
 
 ## Package update flow
 
