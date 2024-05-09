@@ -3,7 +3,6 @@ import {
   ConfigModule,
   createStarterApp,
   createStarterModules,
-  GracefulShutdownModule,
   HealthcheckModule,
   initStarterApp,
   NestStarterConfig,
@@ -21,7 +20,6 @@ describe('exports test', () => {
     expect(ActuatorModule).toBeDefined();
     expect(ConfigModule).toBeDefined();
     expect(HealthcheckModule).toBeDefined();
-    expect(GracefulShutdownModule).toBeDefined();
     expect(PrometheusModule).toBeDefined();
   });
 });
