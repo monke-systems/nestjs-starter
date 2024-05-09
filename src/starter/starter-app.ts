@@ -1,10 +1,10 @@
-import type { INestApplication } from '@nestjs/common';
-import { ShutdownSignal, ValidationPipe } from '@nestjs/common';
+import type { INestApplication, Logger as NestLogger } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
-
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
+import { setupGracefulShutdown } from '../modules/graceful-shutdown';
 import { createNestLogger, LOG_LEVEL } from '../modules/logging';
 import { createFastifyAdapter } from './create-fastify-adapter';
 import type { NestStarterConfig, SwaggerConfig } from './starter-config';
@@ -49,7 +49,11 @@ export const initStarterApp = async <T extends NestStarterConfig>(
     });
   }
 
-  app.enableShutdownHooks([ShutdownSignal.SIGTERM]);
+  app.enableShutdownHooks();
+
+  if (config.http.gracefulShutdown.enabled) {
+    await setupGracefulShutdown(app, logger as unknown as NestLogger);
+  }
 
   app.useGlobalPipes(
     new ValidationPipe({

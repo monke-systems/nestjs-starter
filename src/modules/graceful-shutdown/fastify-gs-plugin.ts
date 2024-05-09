@@ -1,13 +1,17 @@
 import type { Logger } from '@nestjs/common';
+import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
-import type { DebouncedFunction } from './debounce';
-import { debounce } from './debounce';
+import { debounce, type DebouncedFunction } from './debounce';
 
 // Dlya vas perduliroval Alexander Tolmachev https://github.com/orgs/monke-systems/people/AlexTolmachev
+// 1 million $ development
 
-export const createFastifyGracefulShutdownPlugin = (logger: Logger) => {
-  return async (fastify: FastifyInstance) => {
-    logger.log('Started plugin', 'GracefulShutdown');
+export async function setupGracefulShutdown(
+  app: NestFastifyApplication,
+  logger: Logger,
+) {
+  async function FastifyGracefulShutdownPlugin(fastify: FastifyInstance) {
+    logger.log('Graceful shutdown initialization started', 'GracefulShutdown');
 
     let signalReceived = false;
 
@@ -34,9 +38,7 @@ export const createFastifyGracefulShutdownPlugin = (logger: Logger) => {
           }),
         );
 
-        resolveRequestFlowStoppedPromise().catch((error) => {
-          logger.error(error);
-        });
+        resolveRequestFlowStoppedPromise();
       }
 
       done();
@@ -44,7 +46,6 @@ export const createFastifyGracefulShutdownPlugin = (logger: Logger) => {
 
     fastify.addHook('onSend', (request, reply, _, done) => {
       if (signalReceived) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         reply.header('Connection', 'close');
 
         // also available as request.raw.socket
@@ -94,9 +95,7 @@ export const createFastifyGracefulShutdownPlugin = (logger: Logger) => {
       }, 1000);
 
       // it's debounced, so if there are requests still incoming, they will debounce it even more
-      resolveRequestFlowStoppedPromise().catch((error) => {
-        logger.error(error);
-      });
+      resolveRequestFlowStoppedPromise();
 
       const time1 = Date.now();
       await requestFlowStoppedPromise;
@@ -114,7 +113,7 @@ export const createFastifyGracefulShutdownPlugin = (logger: Logger) => {
       const fastifyCloseTime = Date.now() - fastifyCloseStartTime;
 
       const appCloseStartTime = Date.now();
-      await fastify.close();
+      await app.close();
       const appCloseTime = Date.now() - appCloseStartTime;
 
       const longRequestsCount =
@@ -145,7 +144,13 @@ export const createFastifyGracefulShutdownPlugin = (logger: Logger) => {
       .removeAllListeners('SIGTERM')
       .on('SIGINT', createSignalHandler('SIGINT'))
       .on('SIGTERM', createSignalHandler('SIGTERM'));
+  }
 
-    return Promise.resolve();
-  };
-};
+  // @ts-expect-error https://www.fastify.io/docs/latest/Reference/Plugins/#handle-the-scope
+  FastifyGracefulShutdownPlugin[Symbol.for('skip-override')] = true;
+
+  await app
+    .getHttpAdapter()
+    .getInstance()
+    .register(FastifyGracefulShutdownPlugin);
+}

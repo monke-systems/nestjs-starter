@@ -1,7 +1,6 @@
 import { LoggerModule } from 'nestjs-pino';
 import { ActuatorModule, ActuatorService } from '../modules/actuator';
 import { ConfigModule } from '../modules/config';
-import { GracefulShutdownModule } from '../modules/graceful-shutdown';
 import { HealthcheckModule } from '../modules/healthcheck';
 import { createPinoHttpOpts } from '../modules/logging';
 import { PrometheusModule, PrometheusRegistry } from '../modules/prometheus';
@@ -36,12 +35,6 @@ export const createStarterModules = <T extends NestStarterConfig>(
         dependencies: {
           actuator,
         },
-      }),
-    }),
-    GracefulShutdownModule.forRootAsync({
-      inject: [configClass],
-      useFactory: (config: NestStarterConfig) => ({
-        config: config.http.gracefulShutdown,
       }),
     }),
     HealthcheckModule.forRootAsync({

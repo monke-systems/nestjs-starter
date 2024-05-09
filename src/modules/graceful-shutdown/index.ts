@@ -1,2 +1,2 @@
 export * from './config';
-export * from './graceful-shutdown.module';
+export * from './fastify-gs-plugin';
