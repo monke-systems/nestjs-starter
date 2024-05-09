@@ -5,21 +5,9 @@ Warning: This package is in the early development stage. It is not recommended t
 ## Table of contents
 - [Motivation](#motivation)
 - [Installation steps](#installation-steps)
-  - [Install libraries](#install-libraries)
-  - [Create configuration class](#create-configuration-class)
-  - [Add starter modules to AppModule](#add-starter-modules-to-appmodule)
-  - [Create and init app](#create-and-init-app)
 - [Configuration](#configuration)
-  - [Why is this module included in the starter?](#why-is-this-module-included-in-the-starter)
-  - [What's wrong with the @nestjs/config?](#whats-wrong-with-the-nestjsconfig)
-  - [The solution](#the-solution)
 - [Logging](#logging)
-  - [Why is this module included in the starter?](#why-is-this-module-included-in-the-starter-1)
-  - [The solution](#the-solution-1)
 - [Http server](#http-server)
-  - [Why is this module included in the starter?](#why-is-this-module-included-in-the-starter-2)
-  - [What's wrong with the default NestJS HTTP server?](#whats-wrong-with-the-default-nestjs-http-server)
-  - [The solution](#the-solution-2)
 - [Production-ready features](#production-ready-features)
   - [Graceful shutdown](#graceful-shutdown)
   - [Healthcheck](#healthcheck)
@@ -29,6 +17,7 @@ Warning: This package is in the early development stage. It is not recommended t
 ## Motivation
 
 NestJs is great, but compared to mature frameworks from other ecosystems, like Spring Boot, Laravel, Ruby on Rails, it is still considered a micro-framework. The building blocks of the application are very small, and this approach does not scale well. Often, a higher level of abstraction is required.
+Also, the NestJS community overlooks production-ready practices, focusing on "hello world" solutions. A glaring example is the complete disregard for observability tools. Here, there are no official solutions, no mature community-driven solutions.
 
 This starter provides the core block, including tools that are used in most projects:
 
