@@ -31,21 +31,21 @@ export class HealthcheckService
   }
 
   beforeApplicationShutdown(signal?: string) {
-    this.logger.verbose(
+    this.logger.debug(
       `Got shutdown signal ${signal}. Readiness state will be set to false`,
     );
     this.readinessState = false;
   }
 
   private health(req: http.IncomingMessage, res: http.ServerResponse) {
-    this.logger.verbose('Healthcheck request received');
+    this.logger.debug('Healthcheck request received');
     res.writeHead(200);
     res.end();
   }
 
   private readiness(req: http.IncomingMessage, res: http.ServerResponse) {
     const code = this.readinessState ? 200 : 503;
-    this.logger.verbose(`Readiness request received. Responding with ${code}`);
+    this.logger.debug(`Readiness request received. Responding with ${code}`);
 
     res.writeHead(code);
     res.end();
