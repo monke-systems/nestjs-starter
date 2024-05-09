@@ -1,3 +1,6 @@
+// external lib
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import pino from 'pino';
 
 type PinoMethods = Pick<

@@ -1,3 +1,5 @@
+// external lib
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { LoggerService } from '@nestjs/common';
 import type { Level } from 'pino';
 import { ToplvlPinoLogger } from './toplvl-pino-logger';
