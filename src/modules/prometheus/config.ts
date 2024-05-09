@@ -2,8 +2,8 @@ import type { Actuator } from '@monkee/small-standards';
 
 export type PrometheusModuleConfig = {
   enabled: boolean;
-  httpRestMetrics: boolean;
-  collectDefaultMetrics: boolean;
+  enableHttpMetrics: boolean;
+  defaultMetrics: boolean;
 };
 
 export type PrometheusModuleOpts = {

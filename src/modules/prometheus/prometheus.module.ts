@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { HttpMetricsInterceptor } from './http-metrics-interceptor';
 import { PrometheusRegistry } from './prometheus-registry';
 import { ConfigurableModuleClass } from './prometheus.module-def';
 import { PrometheusService } from './prometheus.service';
-import { RestMetricsInterceptor } from './rest-metrics-interceptor';
 
 @Module({
   providers: [
@@ -11,7 +11,7 @@ import { RestMetricsInterceptor } from './rest-metrics-interceptor';
     PrometheusService,
     {
       provide: APP_INTERCEPTOR,
-      useClass: RestMetricsInterceptor,
+      useClass: HttpMetricsInterceptor,
     },
   ],
   exports: [PrometheusRegistry],

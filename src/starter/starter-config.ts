@@ -4,18 +4,11 @@ import { IsEnum, Max, Min } from 'class-validator';
 import type { ActuatorModuleConfig } from '../modules/actuator';
 import type { GracefulShutdownModuleConfig } from '../modules/graceful-shutdown';
 import type { HealthcheckModuleConfig } from '../modules/healthcheck';
+import type { LoggerModuleConfig } from '../modules/logging';
+import { LOG_LEVEL } from '../modules/logging';
 import type { PrometheusModuleConfig } from '../modules/prometheus';
 
-export enum LOG_LEVEL {
-  FATAL = 'fatal',
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-  DEBUG = 'debug',
-  TRACE = 'trace',
-}
-
-export class LoggingConfig {
+export class LoggingConfig implements LoggerModuleConfig {
   @ConfigField()
   prettyMode!: boolean;
 
@@ -24,7 +17,15 @@ export class LoggingConfig {
   level!: LOG_LEVEL;
 
   @ConfigField()
-  traceHttp!: boolean;
+  enableHttpRequestContext!: boolean;
+
+  @ConfigField()
+  enableHttpTracing!: boolean;
+}
+
+export class GracefulShutdownConfig implements GracefulShutdownModuleConfig {
+  @ConfigField()
+  enabled!: boolean;
 }
 
 export class HttpServerConfig {
@@ -32,6 +33,9 @@ export class HttpServerConfig {
   @Min(0)
   @Max(65535)
   port!: number;
+
+  @ConfigField({ nested: true })
+  gracefulShutdown!: GracefulShutdownConfig;
 
   @ConfigField({ optional: true })
   corsOrigin?: string;
@@ -50,15 +54,10 @@ export class PrometheusConfig implements PrometheusModuleConfig {
   enabled!: boolean;
 
   @ConfigField()
-  collectDefaultMetrics!: boolean;
+  defaultMetrics!: boolean;
 
   @ConfigField()
-  httpRestMetrics!: boolean;
-}
-
-export class GracefulShutdownConfig implements GracefulShutdownModuleConfig {
-  @ConfigField()
-  enabled!: boolean;
+  enableHttpMetrics!: boolean;
 }
 
 export class HealthcheckConfig implements HealthcheckModuleConfig {
@@ -91,9 +90,6 @@ export class NestStarterConfig {
 
   @ConfigField({ nested: true })
   prometheus!: PrometheusConfig;
-
-  @ConfigField({ nested: true })
-  gracefulShutdown!: GracefulShutdownConfig;
 
   @ConfigField({ nested: true })
   healthcheck!: HealthcheckConfig;

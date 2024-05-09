@@ -1,10 +1,12 @@
 import type { INestApplication } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
+import { ShutdownSignal, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
+
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
+import { createNestLogger, LOG_LEVEL } from '../modules/logging';
+import { createFastifyAdapter } from './create-fastify-adapter';
 import type { NestStarterConfig, SwaggerConfig } from './starter-config';
 
 export const createStarterApp = async (
@@ -12,9 +14,21 @@ export const createStarterApp = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   module: any,
 ): Promise<NestFastifyApplication> => {
+  // "bufferLogs: true" nestjs feature causes silent log issue.
+  // instead create toplevel logger before app init
+  const logger = createNestLogger({
+    level: LOG_LEVEL.TRACE,
+    prettyMode: process.env.NODE_ENV === 'development',
+    enableHttpTracing: false,
+    enableHttpRequestContext: false,
+  });
+
   const app = await NestFactory.create<NestFastifyApplication>(
     module,
-    new FastifyAdapter(),
+    createFastifyAdapter(true),
+    {
+      logger,
+    },
   );
 
   return app;
@@ -35,7 +49,7 @@ export const initStarterApp = async <T extends NestStarterConfig>(
     });
   }
 
-  app.enableShutdownHooks();
+  app.enableShutdownHooks([ShutdownSignal.SIGTERM]);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -50,6 +64,8 @@ export const initStarterApp = async <T extends NestStarterConfig>(
   return Promise.resolve(app);
 };
 
+const loggerContext = 'Bootstrap';
+
 export const startStarterApp = async <T extends NestStarterConfig>(
   app: NestFastifyApplication,
   configClass: new () => T,
@@ -60,11 +76,11 @@ export const startStarterApp = async <T extends NestStarterConfig>(
   await app.listen(config.http.port, '0.0.0.0');
   const appUrl = await app.getUrl();
 
-  logger.log(`Listening on ${appUrl}`);
+  logger.log(`Listening on ${appUrl}`, loggerContext);
 
   if (config.swagger.enabled) {
-    logger.log(`Swagger available on ${appUrl}/doc/#`);
-    logger.log(`Swagger json schema on ${appUrl}/doc-json`);
+    logger.log(`Swagger available on ${appUrl}/doc/#`, loggerContext);
+    logger.log(`Swagger json schema on ${appUrl}/doc-json`, loggerContext);
   }
 };
 

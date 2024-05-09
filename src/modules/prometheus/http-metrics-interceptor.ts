@@ -15,7 +15,7 @@ import { PrometheusModuleOpts } from './config';
 import { PrometheusRegistry } from './prometheus-registry';
 import { MODULE_OPTIONS_TOKEN } from './prometheus.module-def';
 
-export class RestMetricsInterceptor implements NestInterceptor {
+export class HttpMetricsInterceptor implements NestInterceptor {
   private requestTime?: HistogramType;
 
   constructor(
@@ -24,7 +24,7 @@ export class RestMetricsInterceptor implements NestInterceptor {
     private registry: PrometheusRegistry,
     private adapterHost: HttpAdapterHost,
   ) {
-    if (!this.opts.config.enabled || !this.opts.config.httpRestMetrics) {
+    if (!this.opts.config.enabled || !this.opts.config.enableHttpMetrics) {
       return;
     }
 
@@ -32,12 +32,12 @@ export class RestMetricsInterceptor implements NestInterceptor {
 
     if (adapter === undefined) {
       throw new Error(
-        'RestMetricsInterceptor requires HttpAdapter. Make sure you have HttpAdapter registered in your application',
+        'HttpMetricsInterceptor requires HttpAdapter. Make sure you have HttpAdapter registered in your application',
       );
     }
 
     if (!(adapter instanceof FastifyAdapter)) {
-      throw new Error('RestMetricsInterceptor only supports FastifyAdapter');
+      throw new Error('HttpMetricsInterceptor only supports FastifyAdapter');
     }
 
     this.requestTime = this.registry.createHistogram(
@@ -48,7 +48,7 @@ export class RestMetricsInterceptor implements NestInterceptor {
   }
 
   intercept(ctx: ExecutionContext, next: CallHandler) {
-    if (!this.opts.config.enabled || !this.opts.config.httpRestMetrics) {
+    if (!this.opts.config.enabled || !this.opts.config.enableHttpMetrics) {
       return next.handle();
     }
 

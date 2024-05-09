@@ -3,7 +3,8 @@ import { ActuatorModule, ActuatorService } from '../modules/actuator';
 import { ConfigModule } from '../modules/config';
 import { GracefulShutdownModule } from '../modules/graceful-shutdown';
 import { HealthcheckModule } from '../modules/healthcheck';
-import { PrometheusModule } from '../modules/prometheus';
+import { createPinoHttpOpts } from '../modules/logging';
+import { PrometheusModule, PrometheusRegistry } from '../modules/prometheus';
 import type { NestStarterConfig } from './starter-config';
 
 export const createStarterModules = <T extends NestStarterConfig>(
@@ -40,7 +41,7 @@ export const createStarterModules = <T extends NestStarterConfig>(
     GracefulShutdownModule.forRootAsync({
       inject: [configClass],
       useFactory: (config: NestStarterConfig) => ({
-        config: config.gracefulShutdown,
+        config: config.http.gracefulShutdown,
       }),
     }),
     HealthcheckModule.forRootAsync({
@@ -53,29 +54,15 @@ export const createStarterModules = <T extends NestStarterConfig>(
       }),
     }),
     LoggerModule.forRootAsync({
-      inject: [configClass],
-      useFactory: ({ logging }: NestStarterConfig) => ({
-        pinoHttp: {
-          // отключает pid и hostname
-          base: undefined,
-          level: logging.level,
-          // level из int в string
-          formatters: {
-            level(label) {
-              return { level: label };
-            },
-          },
-          transport: logging.prettyMode
-            ? {
-                target: 'pino-pretty',
-                options: {
-                  colorize: true,
-                },
-              }
-            : undefined,
-          autoLogging: logging.traceHttp,
-        },
-      }),
+      inject: [configClass, PrometheusRegistry],
+      useFactory: (
+        { logging }: NestStarterConfig,
+        registry: PrometheusRegistry,
+      ) => {
+        return {
+          pinoHttp: createPinoHttpOpts(logging, registry),
+        };
+      },
     }),
   ];
 };

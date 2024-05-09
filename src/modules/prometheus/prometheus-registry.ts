@@ -23,7 +23,7 @@ export class PrometheusRegistry implements MeterRegistryType {
   ) {
     this.registry = new client.Registry();
 
-    if (opts.config.collectDefaultMetrics) {
+    if (opts.config.defaultMetrics) {
       client.collectDefaultMetrics({ register: this.registry });
     }
   }

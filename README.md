@@ -40,11 +40,12 @@ This starter provides the core block, including tools that are used in most proj
 4. Healthcheck
 5. Metrics (prometheus)
 
-Starter rules:
+Essential subjects:
 
-1. Each module should address the question "why is this added to the starter?"
+1. Each module should answer the question "Why include it in the starter?"
 2. Each module should be configurable with the internal configuration module.
 3. The starter should be easily extendable and not hinder application customization.
+4. Prohibition on inventing wheels.
 
 ## Installation steps
 
@@ -104,7 +105,7 @@ main();
 
 ## Configuration
 
-### Why is this module included in the starter?
+### Why include it in the starter?
 
 It's hard to imagine an application that doesn't require configuration. Also, starter already includes several components that need to be configured.
 
@@ -128,19 +129,30 @@ TOOD: Add more information about the configuration
 
 ## Logging
 
-### Why is this module included in the starter?
+### Why include it in the starter?
 
 Application without logging is like a car without a dashboard. You can drive it, but you don't know what's going on under the hood (Copilot generated this analogy).
 
 ### The solution
 
-This starter doesn't do much. It uses the default Logger interface. Just follow the NestJS documentation.
+Starter provides a pre-configured logging module that implements the standard NestJs Logger interface.
 
-TODO: Add info of how to configure the logger
+Since there is currently no established format for structured logs (waiting for https://www.cncf.io/projects/opentelemetry/ graduated state), the format was chosen based on popular solutions: zerolog from the Golang ecosystem, and Logback from Java.
+
+Log format with basic fields:
+```json
+{
+    "time": 1696689301574,
+    "level": "debug",
+    "message": "Debug message",
+    "context": "default",
+    "traceId": "25215d96-e247-40b4-8146-a93f1b9250c0"
+}
+```
 
 ## Http server
 
-### Why is this module included in the starter?
+### Why include it in the starter?
 
 It would be entirely correct to say that not every application requires an HTTP server. However, it is an integral part of NestJS itself, and we have decided to make it part of the starter as well.
 
