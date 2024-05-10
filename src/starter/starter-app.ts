@@ -50,9 +50,11 @@ export const initStarterApp = async <T extends NestStarterConfig>(
     await setupGracefulShutdown(app, logger as unknown as NestLogger);
   }
 
+  // Should be here?
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      transform: true,
     }),
   );
 
