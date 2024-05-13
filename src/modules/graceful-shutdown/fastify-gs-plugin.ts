@@ -1,4 +1,4 @@
-import type { Logger } from '@nestjs/common';
+import type { LoggerService } from '@nestjs/common';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { debounce, type DebouncedFunction } from './debounce';
@@ -8,7 +8,7 @@ import { debounce, type DebouncedFunction } from './debounce';
 
 export async function setupGracefulShutdown(
   app: NestFastifyApplication,
-  logger: Logger,
+  logger: LoggerService,
 ) {
   // eslint-disable-next-line @typescript-eslint/require-await
   async function fastifyGracefulShutdownPlugin(fastify: FastifyInstance) {

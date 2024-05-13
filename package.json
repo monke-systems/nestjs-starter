@@ -43,9 +43,7 @@
     "@nestjs/platform-fastify": "^10.0.0",
     "@nestjs/swagger": "^7.0.0",
     "class-validator": "0.13.2",
-    "nestjs-pino": "^4.0.0",
-    "pino-http": "^9.0.0",
-    "pino-pretty": "^10.0.0",
+    "nestjs-cls": "^4.3.0",
     "prom-client": "^15.0.0"
   },
   "jest": {
