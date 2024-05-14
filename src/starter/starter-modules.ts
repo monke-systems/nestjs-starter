@@ -54,7 +54,6 @@ export const createStarterModules = <T extends NestStarterConfig>(
         mount: true,
         generateId: true,
         idGenerator: (req: RawRequestDefaultExpression) => {
-          // fastify types are wrong here
           const fromHeaders = req.headersDistinct['x-request-id'];
 
           if (fromHeaders !== undefined && fromHeaders[0] !== undefined) {
