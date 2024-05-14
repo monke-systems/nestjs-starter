@@ -6,19 +6,16 @@ export enum LOG_LEVEL {
   WARN = 'warn',
   INFO = 'info',
   DEBUG = 'debug',
-  TRACE = 'trace',
+  VERBOSE = 'verbose',
 }
 
-export type LoggerModuleConfig = {
+export type LoggingModuleConfig = {
   prettyMode: boolean;
   level: LOG_LEVEL;
-
-  enableHttpTracing: boolean;
-  enableHttpRequestContext: boolean;
 };
 
 export type LoggerModuleOpts = {
-  config: LoggerModuleConfig;
+  config: LoggingModuleConfig;
 
   dependencies: {
     meterRegistry?: MeterRegistryType;

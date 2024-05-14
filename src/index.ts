@@ -5,3 +5,4 @@ export * from './modules/actuator';
 export * from './modules/config';
 export * from './modules/healthcheck';
 export * from './modules/prometheus';
+export * from './modules/logging';

@@ -1,13 +1,11 @@
-import { setTimeout } from 'timers/promises';
-import type { INestApplication, Logger as NestLogger } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from 'nestjs-pino';
 import { setupGracefulShutdown } from '../modules/graceful-shutdown';
-import { createNestLogger, LOG_LEVEL } from '../modules/logging';
-import { createFastifyAdapter } from './create-fastify-adapter';
+import { LOG_LEVEL, StructuredLogger } from '../modules/logging';
 import type { NestStarterConfig, SwaggerConfig } from './starter-config';
 
 export const createStarterApp = async (
@@ -17,29 +15,28 @@ export const createStarterApp = async (
 ): Promise<NestFastifyApplication> => {
   // "bufferLogs: true" nestjs feature causes silent log issue.
   // instead create toplevel logger before app init
-  const logger = createNestLogger({
-    level: LOG_LEVEL.TRACE,
-    prettyMode: process.env.NODE_ENV === 'development',
-    enableHttpTracing: false,
-    enableHttpRequestContext: false,
+  const logger = new StructuredLogger({
+    config: {
+      level: LOG_LEVEL.VERBOSE,
+      prettyMode: process.env.NODE_ENV === 'development',
+    },
+    dependencies: {},
   });
 
-  const app = await NestFactory.create<NestFastifyApplication>(
+  return NestFactory.create<NestFastifyApplication>(
     module,
-    createFastifyAdapter(true),
+    new FastifyAdapter(),
     {
       logger,
     },
   );
-
-  return app;
 };
 
 export const initStarterApp = async <T extends NestStarterConfig>(
   app: NestFastifyApplication,
   configClass: new () => T,
 ): Promise<INestApplication> => {
-  const logger = app.get(Logger);
+  const logger = app.get(StructuredLogger);
   app.useLogger(logger);
 
   const config = app.get(configClass);
@@ -47,7 +44,7 @@ export const initStarterApp = async <T extends NestStarterConfig>(
   app.enableShutdownHooks();
 
   if (config.http.gracefulShutdown.enabled) {
-    await setupGracefulShutdown(app, logger as unknown as NestLogger);
+    await setupGracefulShutdown(app, logger);
   }
 
   // Should be here?
@@ -72,14 +69,10 @@ export const startStarterApp = async <T extends NestStarterConfig>(
   configClass: new () => T,
 ): Promise<void> => {
   const config = app.get(configClass);
-  const logger = app.get(Logger);
+  const logger = app.get(StructuredLogger);
 
   await app.listen(config.http.port, '0.0.0.0');
   const appUrl = await app.getUrl();
-
-  // ugly solution for pino logging stack issue
-  // toplevel logger is not working properly and ships logs with delay
-  await setTimeout(50);
 
   logger.log(`Listening on ${appUrl}`, loggerContext);
 

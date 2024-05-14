@@ -4,11 +4,11 @@ import { IsEnum, Max, Min } from 'class-validator';
 import type { ActuatorModuleConfig } from '../modules/actuator';
 import type { GracefulShutdownModuleConfig } from '../modules/graceful-shutdown';
 import type { HealthcheckModuleConfig } from '../modules/healthcheck';
-import type { LoggerModuleConfig } from '../modules/logging';
+import type { LoggingModuleConfig } from '../modules/logging';
 import { LOG_LEVEL } from '../modules/logging';
 import type { PrometheusModuleConfig } from '../modules/prometheus';
 
-export class LoggingConfig implements LoggerModuleConfig {
+export class LoggingConfig implements LoggingModuleConfig {
   @ConfigField()
   prettyMode!: boolean;
 
