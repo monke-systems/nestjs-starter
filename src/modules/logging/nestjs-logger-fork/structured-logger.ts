@@ -167,7 +167,7 @@ export class StructuredLogger implements LoggerService {
         ...optionalParams,
       );
 
-      if (level === LOG_LEVEL.FATAL || level === LOG_LEVEL.ERROR) {
+      if (level === LOG_LEVEL.ERROR) {
         process.stderr.write(`${JSON.stringify(structured)}\n`);
       } else {
         process.stdout.write(`${JSON.stringify(structured)}\n`);
