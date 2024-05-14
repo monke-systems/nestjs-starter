@@ -5,7 +5,7 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { setupGracefulShutdown } from '../modules/graceful-shutdown';
-import { LOG_LEVEL, NestJsLogger } from '../modules/logging';
+import { LOG_LEVEL, StructuredLogger } from '../modules/logging';
 import type { NestStarterConfig, SwaggerConfig } from './starter-config';
 
 export const createStarterApp = async (
@@ -15,39 +15,28 @@ export const createStarterApp = async (
 ): Promise<NestFastifyApplication> => {
   // "bufferLogs: true" nestjs feature causes silent log issue.
   // instead create toplevel logger before app init
-  // const logger = createNestLogger({
-  //   level: LOG_LEVEL.TRACE,
-  //   prettyMode: process.env.NODE_ENV === 'development',
-  //   enableHttpTracing: false,
-  //   enableHttpRequestContext: false,
-  // });
-  const logger = new NestJsLogger({
+  const logger = new StructuredLogger({
     config: {
       level: LOG_LEVEL.VERBOSE,
-      prettyMode: false,
+      prettyMode: process.env.NODE_ENV === 'development',
     },
     dependencies: {},
   });
 
-  // // @ts-expect-error this library uses internal logger
-  // ClsModule.logger = logger;
-
-  const app = await NestFactory.create<NestFastifyApplication>(
+  return NestFactory.create<NestFastifyApplication>(
     module,
     new FastifyAdapter(),
     {
       logger,
     },
   );
-
-  return app;
 };
 
 export const initStarterApp = async <T extends NestStarterConfig>(
   app: NestFastifyApplication,
   configClass: new () => T,
 ): Promise<INestApplication> => {
-  const logger = app.get(NestJsLogger);
+  const logger = app.get(StructuredLogger);
   app.useLogger(logger);
 
   const config = app.get(configClass);
@@ -80,7 +69,7 @@ export const startStarterApp = async <T extends NestStarterConfig>(
   configClass: new () => T,
 ): Promise<void> => {
   const config = app.get(configClass);
-  const logger = app.get(NestJsLogger);
+  const logger = app.get(StructuredLogger);
 
   await app.listen(config.http.port, '0.0.0.0');
   const appUrl = await app.getUrl();

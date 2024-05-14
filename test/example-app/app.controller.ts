@@ -1,4 +1,9 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('/')
@@ -7,10 +12,20 @@ export class AppController {
 
   constructor(private service: AppService) {}
 
-  @Get('/hello')
-  getHello() {
-    this.logger.log('Hello World from controller!');
+  @Get('/logging-test')
+  logging() {
+    this.logger.verbose('verbose log');
+    this.logger.debug('debug log');
+    this.logger.log('info log');
+    this.logger.warn('warn log');
+    this.logger.error('error log');
+    this.logger.fatal('fatal log');
 
-    return this.service.getHello();
+    this.logger.log('userdata', {
+      id: 123,
+      something: 123123,
+    });
+
+    throw new InternalServerErrorException(new Error('asdads'));
   }
 }

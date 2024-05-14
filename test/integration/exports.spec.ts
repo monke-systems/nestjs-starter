@@ -8,6 +8,7 @@ import {
   NestStarterConfig,
   PrometheusModule,
   startStarterApp,
+  StructuredLogger,
 } from '../../src';
 
 describe('exports test', () => {
@@ -21,5 +22,6 @@ describe('exports test', () => {
     expect(ConfigModule).toBeDefined();
     expect(HealthcheckModule).toBeDefined();
     expect(PrometheusModule).toBeDefined();
+    expect(StructuredLogger).toBeDefined();
   });
 });

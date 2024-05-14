@@ -9,13 +9,13 @@ export enum LOG_LEVEL {
   VERBOSE = 'verbose',
 }
 
-export type LoggerModuleConfig = {
+export type LoggingModuleConfig = {
   prettyMode: boolean;
   level: LOG_LEVEL;
 };
 
 export type LoggerModuleOpts = {
-  config: LoggerModuleConfig;
+  config: LoggingModuleConfig;
 
   dependencies: {
     meterRegistry?: MeterRegistryType;
