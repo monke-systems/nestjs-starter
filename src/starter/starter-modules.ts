@@ -54,10 +54,16 @@ export const createStarterModules = <T extends NestStarterConfig>(
         mount: true,
         generateId: true,
         idGenerator: (req: RawRequestDefaultExpression) => {
-          const fromHeaders = req.headersDistinct['x-request-id'];
+          const fromHeaders = req.headers['x-request-id'];
 
-          if (fromHeaders !== undefined && fromHeaders[0] !== undefined) {
-            return fromHeaders[0];
+          if (fromHeaders !== undefined) {
+            if (Array.isArray(fromHeaders)) {
+              if (fromHeaders[0] !== undefined) {
+                return fromHeaders[0];
+              }
+            } else {
+              return fromHeaders;
+            }
           }
 
           return randomUUID();
