@@ -15,12 +15,6 @@ export class LoggingConfig implements LoggingModuleConfig {
   @ConfigField()
   @IsEnum(LOG_LEVEL)
   level!: LOG_LEVEL;
-
-  @ConfigField()
-  enableHttpRequestContext!: boolean;
-
-  @ConfigField()
-  enableHttpTracing!: boolean;
 }
 
 export class GracefulShutdownConfig implements GracefulShutdownModuleConfig {

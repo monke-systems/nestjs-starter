@@ -4,7 +4,7 @@ import { ClsModule } from 'nestjs-cls';
 import { ActuatorModule, ActuatorService } from '../modules/actuator';
 import { ConfigModule } from '../modules/config';
 import { HealthcheckModule } from '../modules/healthcheck';
-import { LoggingModule } from '../modules/logging/logging.module';
+import { LoggingModule } from '../modules/logging';
 import { PrometheusModule, PrometheusRegistry } from '../modules/prometheus';
 import type { NestStarterConfig } from './starter-config';
 
@@ -15,13 +15,11 @@ export const createStarterModules = <T extends NestStarterConfig>(
     ConfigModule.forRoot({
       configClass,
       config: {
-        ymlFiles: [
-          'src/resources/default-config.yml',
-          'resources/default-config.yml',
-        ],
-        generateDocAndSchema: process.env.NODE_ENV === 'development',
+        configRootDir: process.env.NEST_CONFIG_ROOT ?? 'src/resources',
+        configEnv: process.env.NEST_CONFIG_ENV,
+        generateDocAndSchema: process.env.NEST_CONFIG_GENERATE_REF === 'true',
+        generateDefaultConfigIfNotExist: process.env.NODE_ENV === 'development',
         configDocPath: 'CONFIG_REFERENCE.MD',
-        configSchemaPath: 'src/resources/config-schema.json',
       },
     }),
     ActuatorModule.forRootAsync({

@@ -13,7 +13,7 @@
     "test:integration": "jest test",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
-    "start-example-app": "NODE_ENV=development ts-node test/example-app/main.ts",
+    "start-example-app": "NODE_ENV=development NEST_CONFIG_ENV=dev NEST_CONFIG_GENERATE_REF=true ts-node test/example-app/main.ts",
     "prepublishOnly": "npm run build",
     "clean": "rm -rf lib"
   },

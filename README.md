@@ -111,10 +111,17 @@ The built-in solution simply lacks behind competitors in the market. Features th
 
 ### The solution
 
-The solution is to use the [@monkee/turbo-config](https://github.com/monke-systems/monke-turbo-config). It provides all the necessary features and is easily integrated into the NestJs application.
-The starter provides a pre-configured setup of the library. All included modules are configurable.
+This starter provides a high-level tool for configuring your applications. Many configuration rules are strictly enforced, and this is done intentionally.
 
-TOOD: Add more information about the configuration
+Key points:
+
+1. The application is configured using YML files with the ability to override settings through YML, environment variables, or CLI arguments.
+2. There is always a default configuration file named config.default.yml.
+3. Separate YML files can be created for each environment. The environment name is set by the NEST_CONFIG_ENV environment variable. Examples: config.production.yml, config.test.yml
+4. The root directory by default is "src/resources". The root directory can be reassigned via the NEST_CONFIG_ROOT environment variable. You should properly configure the production container build
+5. If the application is started with NEST_CONFIG_GENERATE_REF=true, config reference and json schema is automatically generated
+
+The starter uses the [@monkee/turbo-config](https://github.com/monke-systems/monke-turbo-config) library under the hood. Refer to the documentation for more details.
 
 ## Logging
 

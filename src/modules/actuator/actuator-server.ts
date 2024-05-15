@@ -58,7 +58,7 @@ export class ActuatorServer
 
     if (this.opts.config.enabled) {
       this.server.listen(this.opts.config.port, '0.0.0.0', () => {
-        this.logger.log(`Actuator is running on port ${this.opts.config.port}`);
+        this.logger.log(`Actuator listening on port :${this.opts.config.port}`);
       });
     }
   }
