@@ -1,5 +1,5 @@
-export type ConfigModuleOpts = {
-  configClass: new () => object;
+export type ConfigModuleOpts<TConfig extends object> = {
+  configClass: new () => TConfig;
   config: {
     configRootDir: string;
     configEnv?: string;

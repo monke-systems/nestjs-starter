@@ -3,12 +3,14 @@ import { buildStarterConfig } from './build-starter-config';
 import type { ConfigModuleOpts } from './config-module-opts';
 
 export class ConfigModule {
-  static forRoot(opts: ConfigModuleOpts): DynamicModule {
+  static forRoot<TConfig extends object>(
+    opts: ConfigModuleOpts<TConfig>,
+  ): DynamicModule {
     return ConfigModule.register(opts, true);
   }
 
-  private static register(
-    opts: ConfigModuleOpts,
+  private static register<TConfig extends object>(
+    opts: ConfigModuleOpts<TConfig>,
     global: boolean,
   ): DynamicModule {
     const providers: Provider[] = [

@@ -11,10 +11,10 @@ import { defaultConfigText } from './default-config-text';
 
 const DEFAULT_CONFIG_NAME = 'config.default.yml';
 
-export const buildStarterConfig = async (
-  opts: ConfigModuleOpts,
+export const buildStarterConfig = async <TConfig extends object>(
+  opts: ConfigModuleOpts<TConfig>,
   logger: LoggerService = new Logger('ConfigModule'),
-) => {
+): Promise<TConfig> => {
   let defaultConfigPath: string | undefined;
   try {
     defaultConfigPath = await getValidatedConfigPath(
