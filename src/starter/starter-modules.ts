@@ -38,9 +38,8 @@ export const createStarterModules = <T extends NestStarterConfig>(
       }),
     }),
     HealthcheckModule.forRootAsync({
-      inject: [ActuatorService, configClass],
-      useFactory: (actuator: ActuatorService, config: NestStarterConfig) => ({
-        config: config.healthcheck,
+      inject: [ActuatorService],
+      useFactory: (actuator: ActuatorService) => ({
         dependencies: {
           actuator,
         },

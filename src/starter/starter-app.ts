@@ -6,7 +6,7 @@ import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { setupGracefulShutdown } from '../modules/graceful-shutdown';
 import { LOG_LEVEL, StructuredLogger } from '../modules/logging';
-import type { NestStarterConfig, SwaggerConfig } from './starter-config';
+import type { NestStarterConfig } from './starter-config';
 
 export const createStarterApp = async (
   // Typing from original interface
@@ -56,7 +56,7 @@ export const initStarterApp = async <T extends NestStarterConfig>(
   );
 
   if (config.swagger.enabled) {
-    setupSwagger(app, config.appName, config.swagger);
+    setupSwagger(app, config.appName);
   }
 
   return Promise.resolve(app);
@@ -82,15 +82,11 @@ export const startStarterApp = async <T extends NestStarterConfig>(
   }
 };
 
-const setupSwagger = (
-  app: INestApplication,
-  appName: string,
-  config: SwaggerConfig,
-) => {
+const setupSwagger = (app: INestApplication, appName: string) => {
   const optionsBuilder = new DocumentBuilder().setTitle(appName);
 
   const options = optionsBuilder.build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(config.path, app, document);
+  SwaggerModule.setup('doc', app, document);
 };

@@ -3,18 +3,17 @@ import { Injectable } from '@nestjs/common';
 import { IsEnum, Max, Min } from 'class-validator';
 import type { ActuatorModuleConfig } from '../modules/actuator';
 import type { GracefulShutdownModuleConfig } from '../modules/graceful-shutdown';
-import type { HealthcheckModuleConfig } from '../modules/healthcheck';
 import type { LoggingModuleConfig } from '../modules/logging';
 import { LOG_LEVEL } from '../modules/logging';
 import type { PrometheusModuleConfig } from '../modules/prometheus';
 
 export class LoggingConfig implements LoggingModuleConfig {
   @ConfigField()
-  prettyMode!: boolean;
-
-  @ConfigField()
   @IsEnum(LOG_LEVEL)
   level!: LOG_LEVEL;
+
+  @ConfigField()
+  prettyMode!: boolean;
 }
 
 export class GracefulShutdownConfig implements GracefulShutdownModuleConfig {
@@ -42,26 +41,15 @@ export class ActuatorConfig implements ActuatorModuleConfig {
 
 export class PrometheusConfig implements PrometheusModuleConfig {
   @ConfigField()
-  enabled!: boolean;
-
-  @ConfigField()
   defaultMetrics!: boolean;
 
   @ConfigField()
   enableHttpMetrics!: boolean;
 }
 
-export class HealthcheckConfig implements HealthcheckModuleConfig {
-  @ConfigField()
-  enabled!: boolean;
-}
-
 export class SwaggerConfig {
   @ConfigField()
   enabled!: boolean;
-
-  @ConfigField()
-  path!: string;
 }
 
 @ConfigPrefix('nest')
@@ -81,9 +69,6 @@ export class NestStarterConfig {
 
   @ConfigField({ nested: true })
   prometheus!: PrometheusConfig;
-
-  @ConfigField({ nested: true })
-  healthcheck!: HealthcheckConfig;
 
   @ConfigField({ nested: true })
   swagger!: SwaggerConfig;

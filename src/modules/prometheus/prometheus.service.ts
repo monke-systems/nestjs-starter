@@ -12,15 +12,13 @@ export class PrometheusService implements OnApplicationBootstrap {
   ) {}
 
   onApplicationBootstrap() {
-    if (this.opts.config.enabled) {
-      this.opts.dependencies.actuator.registerRoute(
-        '/prometheus',
-        async (req, res) => {
-          res.writeHead(200, { 'Content-Type': 'text/plain' });
-          const metrics = await this.registry.metrics();
-          res.end(metrics);
-        },
-      );
-    }
+    this.opts.dependencies.actuator.registerRoute(
+      '/prometheus',
+      async (req, res) => {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        const metrics = await this.registry.metrics();
+        res.end(metrics);
+      },
+    );
   }
 }

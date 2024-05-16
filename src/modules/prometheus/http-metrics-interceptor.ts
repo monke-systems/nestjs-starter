@@ -24,7 +24,7 @@ export class HttpMetricsInterceptor implements NestInterceptor {
     private registry: PrometheusRegistry,
     private adapterHost: HttpAdapterHost,
   ) {
-    if (!this.opts.config.enabled || !this.opts.config.enableHttpMetrics) {
+    if (!this.opts.config.enableHttpMetrics) {
       return;
     }
 
@@ -48,7 +48,7 @@ export class HttpMetricsInterceptor implements NestInterceptor {
   }
 
   intercept(ctx: ExecutionContext, next: CallHandler) {
-    if (!this.opts.config.enabled || !this.opts.config.enableHttpMetrics) {
+    if (!this.opts.config.enableHttpMetrics) {
       return next.handle();
     }
 
