@@ -1,5 +1,6 @@
 import {
   ActuatorModule,
+  buildStarterConfig,
   ConfigModule,
   createStarterApp,
   createStarterModules,
@@ -23,5 +24,6 @@ describe('exports test', () => {
     expect(HealthcheckModule).toBeDefined();
     expect(PrometheusModule).toBeDefined();
     expect(StructuredLogger).toBeDefined();
+    expect(buildStarterConfig).toBeDefined();
   });
 });
