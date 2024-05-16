@@ -1,7 +1,7 @@
 {
   "name": "@monkee/nestjs-starter",
   "description": "@monkee/nestjs-starter package",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
