@@ -56,13 +56,13 @@ export class HttpMetricsInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    const start = performance.now();
+    const start = Date.now();
 
     const req = ctx.switchToHttp().getRequest() as FastifyRequest;
 
     return next.handle().pipe(
       catchError((err) => {
-        const end = performance.now();
+        const end = Date.now();
         const duration = end - start;
 
         // надеемся, что на это можно рассчитывать
