@@ -1,4 +1,3 @@
-import { performance } from 'perf_hooks';
 import type { HistogramType } from '@monkee/small-standards';
 import type {
   CallHandler,
@@ -77,7 +76,7 @@ export class HttpMetricsInterceptor implements NestInterceptor {
         throw err;
       }),
       tap(() => {
-        const end = performance.now();
+        const end = Date.now();
         const duration = end - start;
 
         const response = ctx.switchToHttp().getResponse() as FastifyReply;

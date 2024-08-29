@@ -80,7 +80,9 @@ export async function setupGracefulShutdown(
       );
 
       // signal can be received several times
-      if (signalReceived) return;
+      if (signalReceived) {
+        return;
+      }
 
       signalReceived = true;
 
