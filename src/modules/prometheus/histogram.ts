@@ -11,4 +11,17 @@ export class PrometheusHistogram implements HistogramType {
       this.histogram.observe(labels, value);
     }
   }
+
+  startTimer(
+    startLabels: Record<string, string> | undefined,
+  ): (endLabels?: Record<string, string>) => number {
+    const start = process.hrtime();
+
+    return (endLabels?: Record<string, string>) => {
+      const delta = process.hrtime(start);
+      const value = delta[0] + delta[1] / 1e9;
+      this.observe(value, Object.assign({}, startLabels, endLabels));
+      return value;
+    };
+  }
 }

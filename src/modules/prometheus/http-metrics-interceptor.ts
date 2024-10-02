@@ -43,6 +43,10 @@ export class HttpMetricsInterceptor implements NestInterceptor {
       'nest_http_requests_seconds',
       'Http server request time seconds',
       ['method', 'uri', 'status'],
+      [
+        0.005, 0.01, 0.025, 0.05, 0.1, 0, 15, 0.2, 0.25, 0.3, 0.5, 0.7, 1, 2,
+        2.5, 5, 8, 10, 14, 16, 22, 28,
+      ],
     );
   }
 
@@ -55,19 +59,16 @@ export class HttpMetricsInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    const start = Date.now();
+    const end = this.requestTime!.startTimer();
 
     const req = ctx.switchToHttp().getRequest() as FastifyRequest;
 
     return next.handle().pipe(
       catchError((err) => {
-        const end = Date.now();
-        const duration = end - start;
-
         // надеемся, что на это можно рассчитывать
         const status = err instanceof HttpException ? err.getStatus() : 500;
 
-        this.requestTime!.observe(duration / 1000, {
+        end({
           method: req.method,
           uri: req.routeOptions.url ?? 'unknown',
           status: status.toString(),
@@ -76,12 +77,9 @@ export class HttpMetricsInterceptor implements NestInterceptor {
         throw err;
       }),
       tap(() => {
-        const end = Date.now();
-        const duration = end - start;
-
         const response = ctx.switchToHttp().getResponse() as FastifyReply;
 
-        this.requestTime!.observe(duration / 1000, {
+        end({
           method: req.method,
           uri: req.routeOptions.url ?? 'unknown',
           status: response.statusCode.toString(),

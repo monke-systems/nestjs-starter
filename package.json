@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@monkee/eslint-config": "0.9.16",
-    "@monkee/small-standards": "^0.1.1",
+    "@monkee/small-standards": "^0.2.0",
     "@types/jest": "^29.5.2",
     "@types/node": "20.3.1",
     "@typescript-eslint/eslint-plugin": "6.2.0",
